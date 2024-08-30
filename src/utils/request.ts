@@ -50,7 +50,10 @@ const getClientFbc = (req: NextApiRequest): string => {
     const url = new URL(req.headers.referer);
 
     if (url.searchParams.has('fbclid')) {
-      return url.searchParams.get('fbclid') ?? '';
+      const fbclid = url.searchParams.get('fbclid') || '';
+      const subdomainIndex = getSubdomainIndex(req.headers.host || '');
+      const creationTime = Date.now();
+      return `fb.${subdomainIndex}.${creationTime}.${fbclid}`;
     }
   }
 
